@@ -8,12 +8,14 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "sucrase ./src -d ./dist --transforms typescript,imports"
+    "dev": "nodemon src/index.ts",
+    "build": "sucrase ./src -d ./dist --transforms typescript,imports"
   },
   "keywords": [],
   "author": "Rfontt",
   "license": "ISC",
   "devDependencies": {
+    "nodemon": "^2.0.16",
     "sucrase": "^3.21.0",
     "tslint": "^6.1.3",
     "typescript": "^4.6.4"
