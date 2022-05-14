@@ -1,0 +1,21 @@
+{
+  "name": "notification-pattern",
+  "version": "1.0.0",
+  "description": "Com Domain Driven Design(DDD) temos a prática de que todas as nossas entidades precisam está 100% validadas, ou seja, não podemos deixar algo ser criado de forma invalida. O desenvolvedor pode pensar que isso não será tão difícil de encaixar no seu código, pois existe diferentes formas para tratar esses erros. No entanto, o dev não será o consumidor final do produto e por isso precisamos pensar em quem vai consumí-lo e facilitar o entendimento de erros que esse cliente pode ter cometido ao preencher algum formulário que enviará dados de uma forma que nossas entidades não estão prontas para receber.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "sucrase ./src -d ./dist --transforms typescript,imports"
+  },
+  "keywords": [],
+  "author": "Rfontt",
+  "license": "ISC",
+  "devDependencies": {
+    "sucrase": "^3.21.0",
+    "tslint": "^6.1.3",
+    "typescript": "^4.6.4"
+  }
+}
