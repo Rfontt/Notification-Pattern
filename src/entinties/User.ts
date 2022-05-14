@@ -8,4 +8,18 @@ export default class User {
         this.name = name;
         this.email = email;
     }
+
+    validate(): void {
+        if (this.id === undefined || null) {
+            throw new Error('ID is required');
+        }
+
+        if (!this.name) {
+            throw new Error('Name is required');
+        }
+
+        if (!this.email) {
+            throw new Error('Email is required');
+        }
+    }
 }
