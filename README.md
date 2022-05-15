@@ -72,3 +72,21 @@ test('Should return an exception when id, name and email are invalid with all ex
 ```
 
 ### Com o Notification Pattern
+
+Primeiramente precisamos criar uma interface que contenha tudo sobre as notificações de erros que queremos lançar.
+
+```ts
+// Aqui temos um type de notifications, ou seja, ele terá os atributos necessários para um erro.
+export type NotificationErrorProps = {
+    message: string;
+    context: string;
+}
+
+// Aqui criamos a interface com os métodos e atributos(nesse caso não tem atributos, apenas métodos) para o tratamento e lançamentos desses erros.
+export default interface NotificationInterface {
+    addError(error: NotificationErrorProps): void;
+    hasErrors(): boolean;
+    getErrors(): NotificationInterface[];
+    messages(context?:string): string;
+}
+```
