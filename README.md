@@ -46,28 +46,30 @@ Feito isso, Partimos para os testes. Mas note o seguinte:
 - Mas e o quarto teste, será que passa? Bom, aqui encontramos um problema, pois queremos que, se a class for instânciada sem nenhum atributo válido, seja lançado uma exception com a mensagem de erro de cada atributo que está inválido. Mas ele irá retornar apenas uma exception referente ao primeiro atributo, ou seja, o ID. E é por isso que precisamos do Notification Pattern para que possamos evitar essa falta de coerência nas exceptions. 
 
 ```ts
-test('Should return an exception when id is invalid', () => {
+describe('Unit tests for user', () => {
+    test('Should return an exception when id is invalid', () => {
         expect(() => {
-            new User(undefined, 'Jhon', 'jhontest15252@gmail.com');
-        }).toThrowError('ID is required');
-});
+            new User(undefined, 'Jhon', 'jhontest15252@gmail.com')
+        }).toThrowError('User: ID is required');
+    });
 
-test('Should return an exception when name is invalid', () => {
-    expect(() => {
-        new User(1, '', 'jhontest15252@gmail.com');
-    }).toThrowError('Name is required');
-});
+    test('Should return an exception when name is invalid', () => {
+        expect(() => {
+            new User(1, '', 'jhontest15252@gmail.com');
+        }).toThrowError('User: Name is required');
+    });
 
-test('Should return an exception when email is invalid', () => {
-    expect(() => {
-    new User(1, 'Jhon', '');
-    }).toThrowError('Email is required');
-});
+    test('Should return an exception when email is invalid', () => {
+        expect(() => {
+            new User(1, 'Jhon', '');
+        }).toThrowError('User: Email is required');
+    });
 
-test('Should return an exception when id, name and email are invalid with all exceptions.', () => {
-    expect(() => {
-    new User(undefined, '', '');
-    }).toThrowError('ID is required, Name is required, Email is required');
+    test('Should return an exception when id, name and email are invalid with all exceptions.', () => {
+        expect(() => {
+            new User(undefined, '', '');
+        }).toThrowError('User: ID is required,User: Name is required,User: Email is required');
+    });
 });
 ```
 
@@ -119,7 +121,7 @@ export default class Notification implements NotificationInterface {
         // Faz um map nos erros para pegar todas as suas mensagens. Mas para isso verifica se o context é undefined ou é igual ao contexto passado.
         this.errors.map((error) => {
             if (context === undefined || error.context === context) {
-                message += `${error.context}: ${error.message},`;
+                message += `${error.context}: ${error.message}`;
             }
         });
 
@@ -127,3 +129,72 @@ export default class Notification implements NotificationInterface {
     }    
 }
 ```
+
+Agora, precisamos criar a class de NotificationError que cuidará da mensagem que será repassada para o cliente que consumirá essa entidade, caso ele cometa algum erro.
+
+```ts
+import { NotificationErrorProps } from "../interfaces/notification.interface";
+
+export default class NotificationError extends Error {
+    constructor(public errors: NotificationErrorProps[]) {
+        super(errors.map(error => `${error.context}: ${error.message}`).join(","));
+    }
+}
+```
+
+Por fim, modificamos nossa class de User para a melhor forma de evitar erros na instância da mesma.
+
+```ts
+export default class User {
+    private id: number;
+    private name: string;
+    private email: string;
+    // Cuidará da instância de Notification para que possamos manipular seus métodos
+    private notification: NotificationInterface;
+
+    constructor(id: number, name: string, email: string) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        // Instânciamos a notification
+        this.notification = new Notification();
+        // Mantemos nossa função
+        this.validate();
+        
+        // Verificamos se tem error e se tiver lançamos a nossa "notification".
+        if(this.notification.hasErrors()) {
+            throw new NotificationError(this.notification.getErrors());
+        }
+    }
+
+    // Continuamos com nossa função de validação, porém agora ela irá adicionar os erros no nosso método addError({ context, message });
+    validate(): void {
+        if (this.id === undefined || null) {
+            this.notification.addError({
+                context: "User",
+                message: "ID is required"
+            });
+        }
+
+        if (!this.name) {
+            this.notification.addError({
+                context: "User",
+                message: "Name is required"
+            });
+        }
+
+        if (!this.email) {
+            this.notification.addError({
+                context: "User",
+                message: "Email is required"
+            });
+        }
+    }
+}
+```
+
+### Final
+ 
+Bom, com isso você aprendeu como organizar e validar seus códigos para evitar possíveis erros. Lembre-se sempre de rodar o arquivo de testes no final.
+
+**COMPILO-TESTO-FAÇO COMMIT**

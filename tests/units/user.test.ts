@@ -29,4 +29,4 @@ describe('Unit tests for user', () => {
             new User(undefined, '', '');
         }).toThrowError('User: ID is required,User: Name is required,User: Email is required');
     });
-})
+});

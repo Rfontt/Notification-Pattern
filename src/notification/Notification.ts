@@ -17,7 +17,7 @@ export default class Notification implements NotificationInterface {
 
         this.errors.map((error) => {
             if (context === undefined || error.context === context) {
-                message += `${error.context}: ${error.message},`;
+                message += `${error.context}: ${error.message}`;
             }
         });
 
