@@ -90,3 +90,40 @@ export default interface NotificationInterface {
     messages(context?:string): string;
 }
 ```
+
+Feito isso, precisamos de uma class de notificação para tratar esses métodos de criação, verificação, seleção e messagens de erros.
+
+```ts
+import NotificationInterface, { NotificationErrorProps } from "../interfaces/notification.interface";
+
+export default class Notification implements NotificationInterface {
+    // Atributo que guardará os errors e possuirá o  tipoNotificationErrorProps 
+    private errors: NotificationErrorProps[] = [];
+
+    addError(error: NotificationErrorProps): void {
+        // Adiciona um erro ao array(com atributos: context e message)
+        this.errors.push(error);
+    }
+    hasErrors(): boolean {
+        // Verifica se o array possui elementos, ou seja, é maior que zero.
+        return this.errors.length > 0;
+    }
+    getErrors(): NotificationErrorProps[] {
+        // retorna o array que contêm os erros
+        return this.errors;
+    }
+    messages(context?: string): string {
+        // Cria uma variável que irá ser retornada
+        let message = '';
+
+        // Faz um map nos erros para pegar todas as suas mensagens. Mas para isso verifica se o context é undefined ou é igual ao contexto passado.
+        this.errors.map((error) => {
+            if (context === undefined || error.context === context) {
+                message += `${error.context}: ${error.message},`;
+            }
+        });
+
+        return message;
+    }    
+}
+```
