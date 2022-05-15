@@ -7,10 +7,6 @@ import User from '../../src/entinties/User';
 
 describe('Unit tests for user', () => {
     test('Should return an exception when id is invalid', () => {
-        // const user = new User(undefined, 'Jhon', 'jhontest15252@gmail.com');
-
-        // console.log(user)
-
         expect(() => {
             new User(undefined, 'Jhon', 'jhontest15252@gmail.com')
         }).toThrowError('User: ID is required');
