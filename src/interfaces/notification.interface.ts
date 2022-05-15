@@ -6,6 +6,6 @@ export type NotificationErrorProps = {
 export default interface NotificationInterface {
     addError(error: NotificationErrorProps): void;
     hasErrors(): boolean;
-    getErrors(): NotificationInterface[];
+    getErrors(): NotificationErrorProps[];
     messages(context?:string): string;
 }
