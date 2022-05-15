@@ -13,6 +13,14 @@ export default class Notification implements NotificationInterface {
         return this.errors;
     }
     messages(context?: string): string {
-        throw new Error("Method not implemented.");
+        let message = '';
+
+        this.errors.map((error) => {
+            if (context === undefined || error.context === context) {
+                message += `${error.context}: ${error.message},`;
+            }
+        });
+
+        return message;
     }    
 }
